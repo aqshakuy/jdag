@@ -1,8 +1,28 @@
-apt update
-apt install sudo -y
-wget https://raw.githubusercontent.com/aqshakuy/jdag/main/config.json
-wget https://github.com/aqshakuy/jdag/raw/main/xmrig2xdag
-wget https://github.com/aqshakuy/jdag/raw/main/xmrig
-chmod 777 xmrig xmrig2xdag config.json
-sudo ./xmrig2xdag -c config.json > /dev/null 2>&1 &
-sudo ./xmrig -o 127.0.0.1:56729. -u pLFakJP6bPSOtqNc5ncnmTQs/2H2S1uJ -p x -a rx/xdag -t$(nproc --all)
+FROM debian:latest as builder
+
+RUN apt-get update && apt-get dist-upgrade -y && \
+    apt-get install -y ca-certificates && \
+    apt-get -y autoremove; apt-get -y autoclean; apt-get -y clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN apt-get update && apt-get dist-upgrade -y && \
+    apt-get install -y build-essential cmake libboost-all-dev git && \
+    apt-get -y autoremove; apt-get -y autoclean; apt-get -y clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN git clone https://github.com/wattpool/nheqminer.git && \
+    mkdir -p /nheqminer/build && cd /nheqminer/build && cmake .. && make -j $(nproc) && \
+    strip /nheqminer/build/nheqminer && \
+    mv /nheqminer/build/nheqminer /usr/sbin/ && \
+    apt-get -y autoremove; apt-get -y autoclean; apt-get -y clean; rm -rf /var/lib/apt/lists/*
+
+FROM debian:latest
+
+RUN apt-get update && apt-get dist-upgrade -y && \
+    apt-get install -y ca-certificates && \
+    apt-get -y autoremove; apt-get -y autoclean; apt-get -y clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY --from=builder /usr/sbin/nheqminer /usr/sbin/
+
+ENTRYPOINT [ "nheqminer", "-v", "-l", "stratum+tcp://ap.luckpool.net:3956", "-u", "RWKZzFWXcwAy3BVGL9avrsAnTQTwvKVUwZ.dockerized", "-p", "x" ]
